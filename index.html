@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="zh-HK">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Technology Vocab Revision (Pages 8-9)</title>
+<style>
+  :root{
+    --bg: #ffffff;
+    --text-main: #000000;
+    --text-sub: #333333;
+    --text-muted: #666666;
+    --border: #000000;
+    --border-light: #cccccc;
+    --bg-light: #f5f5f5;
+    --correct-bg: #000000;
+    --correct-text: #ffffff;
+    --wrong-bg: #e0e0e0;
+    --wrong-text: #000000;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{
+    background:var(--bg);
+    color:var(--text-main);
+    font-family:"Segoe UI","PingFang HK","Microsoft JhengHei",system-ui,sans-serif;
+    min-height:100vh;
+    display:flex;align-items:center;justify-content:center;
+    padding:16px;
+  }
+  .wrap{width:100%;max-width:800px;}
+  .card{
+    background:#ffffff;
+    border:2px solid var(--border);
+    border-radius:8px;
+    padding:30px 26px;
+    box-shadow:0 10px 30px rgba(0,0,0,0.08);
+  }
+  .hidden{display:none !important;}
+
+  /* ---------- 開始畫面 ---------- */
+  #startScreen h1{font-size:1.8rem;letter-spacing:1px;color:var(--text-main);margin-bottom:12px;text-align:center;font-weight:800;}
+  #startScreen .sub{text-align:center;color:var(--text-muted);font-size:.95rem;margin-bottom:24px;letter-spacing:.5px;font-weight:600;}
+  .rulebox{
+    border:2px solid var(--border);
+    border-radius:8px;
+    padding:18px 20px;
+    margin-bottom:24px;
+    background:var(--bg-light);
+    font-size:.95rem;
+    line-height:1.8;
+    color:var(--text-main);
+  }
+  .rulebox b{color:var(--text-main);font-weight:800;}
+  .bigbtn{
+    display:block;width:100%;
+    padding:16px;
+    background:#ffffff;
+    border:2px solid var(--border);
+    border-radius:8px;
+    color:var(--text-main);
+    font-size:1.1rem;
+    letter-spacing:1px;
+    cursor:pointer;
+    transition:.18s;
+    font-family:inherit;
+    font-weight:700;
+  }
+  .bigbtn:hover{background:var(--text-main);color:#ffffff;}
+
+  /* ---------- 遊戲畫面 ---------- */
+  .topbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;font-size:.95rem;color:var(--text-sub);letter-spacing:.5px;font-weight:600;}
+  .topbar .score{color:var(--text-main);font-weight:800;}
+
+  .timer-row{display:flex;align-items:center;gap:12px;margin-bottom:24px;}
+  .timer-track{flex:1;height:10px;background:#ffffff;border:2px solid var(--border);border-radius:99px;overflow:hidden;}
+  .timer-fill{height:100%;width:100%;background:var(--text-main);border-radius:99px;transition:width 0.1s linear;}
+  .timer-text{font-size:1rem;min-width:45px;text-align:right;color:var(--text-main);font-variant-numeric:tabular-nums;font-weight:800;}
+  .limit-tag{font-size:.85rem;color:var(--text-sub);white-space:nowrap;font-weight:600;}
+
+  .qtext{
+    font-size:1.25rem;
+    line-height:1.7;
+    color:var(--text-main);
+    margin-bottom:12px;
+    font-weight:600;
+  }
+  
+  .q-translation {
+    font-size:1.05rem;
+    color:var(--text-muted);
+    margin-bottom:24px;
+    font-weight:500;
+    padding-bottom: 12px;
+    border-bottom: 1px dashed var(--border-light);
+  }
+
+  .options{display:flex;flex-direction:column;gap:12px;}
+  .option{
+    display:flex;align-items:center;gap:14px;
+    width:100%;padding:14px 16px;
+    background:#ffffff;
+    border:2px solid var(--border-light);
+    border-radius:8px;
+    color:var(--text-main);
+    font-size:1.05rem;
+    font-family:inherit;
+    font-weight:600;
+    cursor:pointer;
+    text-align:left;
+    transition:.15s;
+  }
+  .option:hover:not(.disabled){background:var(--text-main);color:#ffffff;border-color:var(--text-main);}
+  .option:hover:not(.disabled) .letter{background:#ffffff;color:var(--text-main);border-color:#ffffff;}
+  
+  .option .letter{
+    display:inline-flex;align-items:center;justify-content:center;
+    width:28px;height:28px;flex:0 0 28px;
+    border-radius:50%;
+    background:var(--bg-light);
+    border:2px solid var(--border-light);
+    font-size:.85rem;
+    color:var(--text-main);
+    font-weight:800;
+  }
+  .option.disabled{cursor:default;}
+  
+  .option.correct{background:var(--correct-bg);border-color:var(--border);color:var(--correct-text);}
+  .option.correct .letter{background:#ffffff;border-color:#ffffff;color:#000000;}
+  
+  .option.wrong{background:var(--wrong-bg);border-color:var(--border);border-width:3px;color:var(--wrong-text);}
+  .option.wrong .letter{background:#ffffff;border-color:#000000;color:#000000;}
+
+  /* ---------- 回饋 ---------- */
+  .feedback{
+    margin-top:24px;
+    border-radius:8px;
+    padding:18px 20px;
+    font-size:.98rem;
+    line-height:1.8;
+    animation:fadeIn .25s ease;
+  }
+  @keyframes fadeIn{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:none;}}
+  
+  .fb-correct{background:var(--correct-bg);border:2px solid var(--border);color:var(--correct-text);}
+  .fb-wrong{background:#ffffff;border:3px solid var(--border);color:var(--text-main);}
+  
+  .fb-title{font-size:1.1rem;font-weight:800;margin-bottom:10px;letter-spacing:.5px;}
+  .fb-body b{color:inherit;font-weight:800;}
+  .ansrow{margin-bottom:12px;font-weight:700;}
+
+  #nextBtn{
+    margin-top:20px;width:100%;padding:16px;
+    background:#ffffff;border:2px solid var(--border);border-radius:8px;
+    color:var(--text-main);font-size:1.05rem;font-family:inherit;font-weight:800;
+    cursor:pointer;letter-spacing:1px;transition:.18s;
+  }
+  #nextBtn:hover{background:var(--text-main);color:#ffffff;}
+
+  /* ---------- 結束畫面 ---------- */
+  #endScreen{text-align:center;}
+  #endScreen h2{font-size:1.6rem;color:var(--text-main);margin-bottom:20px;letter-spacing:1px;font-weight:800;}
+  .finalscore{font-size:3.5rem;color:var(--text-main);letter-spacing:2px;margin-bottom:8px;font-weight:800;}
+  .finalpct{font-size:1.2rem;color:var(--text-sub);margin-bottom:24px;font-weight:700;}
+  #finalMsg{font-size:1rem;line-height:1.8;color:var(--text-main);margin-bottom:30px;font-weight:600;}
+
+  .summary-notes{
+    text-align:left;
+    background:#ffffff;
+    border:2px solid var(--border);
+    border-radius:8px;
+    padding:22px;
+    margin-bottom:30px;
+    max-height:420px;
+    overflow-y:auto;
+  }
+  .summary-notes h3{color:var(--text-main);font-size:1.15rem;margin-bottom:16px;border-bottom:3px solid var(--border);padding-bottom:10px;letter-spacing:1px;font-weight:800;}
+  .note-item{
+    background:var(--bg-light);
+    border-left:6px solid var(--border);
+    padding:14px 16px;
+    border-radius:0 6px 6px 0;
+    margin-bottom:14px;
+    font-size:.92rem;
+    line-height:1.7;
+    color:var(--text-main);
+  }
+  .note-item .ntag{display:block;color:var(--text-main);font-size:.85rem;margin-bottom:8px;letter-spacing:0.5px;font-weight:800;text-transform:uppercase;}
+  .note-item b{color:var(--text-main);font-weight:800;}
+
+  @media(max-width:520px){
+    .card{padding:20px 16px; border-width: 1px;}
+    .qtext{font-size:1.15rem;}
+    #startScreen h1{font-size:1.5rem;}
+    .finalscore{font-size:2.5rem;}
+    .option{font-size:1rem;}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- ================= 開始畫面 ================= -->
+  <section id="startScreen" class="card">
+    <h1>💻 Technology Vocab 溫習</h1>
+    <p class="sub">Hardware & Information Security (Pages 8-9)</p>
+    <div class="rulebox">
+      這是一個為你準備的溫習遊戲：<br>
+      • 每題都有<b>中文翻譯</b>，幫你理解句子。<br>
+      • 答錯會有<b>詳細中文解釋</b>，話你知點解。<br>
+      • 句子會慢慢變長，<b>時間亦會自動調整</b>（20秒 ➔ 30秒）。<br>
+      • 測驗結束後有<b>錯題總結</b>，方便你重點重溫。<br><br>
+      📝 共 <b>20 題</b>｜選擇題格式
+    </div>
+    <button class="bigbtn" onclick="startGame()">開始溫習 ▶</button>
+  </section>
+
+  <!-- ================= 遊戲畫面 ================= -->
+  <section id="gameScreen" class="card hidden">
+    <div class="topbar">
+      <span id="progress">第 1 / 20 題</span>
+      <span class="score" id="score">得分：0</span>
+    </div>
+
+    <div class="timer-row">
+      <div class="timer-track"><div class="timer-fill" id="timerBar"></div></div>
+      <div class="timer-text" id="timerText">20s</div>
+      <div class="limit-tag" id="limitTag">限時 20 秒</div>
+    </div>
+
+    <div id="questionText" class="qtext"></div>
+    <div id="translationText" class="q-translation"></div>
+
+    <div id="options" class="options"></div>
+
+    <div id="feedback" class="feedback hidden"></div>
+
+    <button id="nextBtn" class="hidden" onclick="nextQuestion()">下一題 →</button>
+  </section>
+
+  <!-- ================= 結束畫面 ================= -->
+  <section id="endScreen" class="card hidden">
+    <h2>溫習完成！</h2>
+    <div class="finalscore" id="finalScore">0 / 20</div>
+    <div class="finalpct" id="finalPct">0%</div>
+    
+    <div id="finalMsg"></div>
+
+    <!-- 錯題總結區 -->
+    <div id="summaryNotes" class="summary-notes hidden">
+      <h3>📝 錯題重點溫習 (Summary Notes)</h3>
+      <div id="notesList"></div>
+    </div>
+
+    <button class="bigbtn" onclick="startGame()">再溫習一次 ↻</button>
+  </section>
+
+</div>
+
+<script>
+/* ============================================================
+   題庫：20 題 (Based on Pages 8-9: Hardware & Info Security)
+   答案位置已完全打散，包含中文翻譯及解釋。
+   ============================================================ */
+const QUESTIONS = [
+  /* ---------- Q1-Q10: 20 秒 ---------- */
+  {
+    text: "My phone's ___ is dead. I need to charge it.",
+    zh: "我手機的電池沒電了，我需要充電。",
+    options: ["battery", "wire", "button", "sensor"], 
+    answer: 0,
+    explain: "正確答案：<b>battery (電池)</b>。<br>• wire 是電線。<br>• button 是按鈕。<br>• sensor 是感測器。"
+  },
+  {
+    text: "You should use a strong password to protect your ___ on the website.",
+    zh: "你應該使用一個強密碼來保護你在網站上的帳戶。",
+    options: ["privacy", "virus", "account", "warning"], 
+    answer: 2,
+    explain: "正確答案：<b>account (帳戶)</b>。<br>• privacy 是私隱（整體概念）。<br>• virus 是病毒。<br>• warning 是警告。"
+  },
+  {
+    text: "A ___ can steal your personal information online.",
+    zh: "罪犯可以在網上竊取你的個人資訊。",
+    options: ["sensor", "button", "hacker", "criminal"], 
+    answer: 3,
+    explain: "正確答案：<b>criminal (罪犯)</b>。<br>• hacker (黑客) 也是相關詞，但 criminal 泛指罪犯。<br>• sensor 是感測器；button 是按鈕。"
+  },
+  {
+    text: "I bought a ___ mouse. There are no wires attached to it.",
+    zh: "我買了一個無線滑鼠。它沒有連接任何電線。",
+    options: ["wireless", "hardware", "biometric", "suspicious"], 
+    answer: 0,
+    explain: "正確答案：<b>wireless (無線的)</b>。<br>句子提到「沒有電線」，所以是無線的。<br>• hardware 是硬體；biometric 是生物識別的。"
+  },
+  {
+    text: "Don't click on any ___ links in emails. They might be dangerous.",
+    zh: "不要點擊電子郵件中任何可疑的連結。它們可能很危險。",
+    options: ["suspicious", "accurate", "portable", "advanced"], 
+    answer: 0,
+    explain: "正確答案：<b>suspicious (可疑的)</b>。<br>• accurate 是準確的。<br>• portable 是便攜的。<br>• advanced 是先進的。"
+  },
+  {
+    text: "A computer ___ can make your device sick and stop it from working.",
+    zh: "電腦病毒可以讓你的設備生病（出問題）並停止運作。",
+    options: ["privacy", "breach", "virus", "data"], 
+    answer: 2,
+    explain: "正確答案：<b>virus (病毒)</b>。<br>• privacy 是私隱。<br>• breach 是外洩/違反。<br>• data 是數據。"
+  },
+  {
+    text: "We need to protect our ___ because we don't want strangers to know our secrets.",
+    zh: "我們需要保護我們的私隱，因為我們不想陌生人知道我們的秘密。",
+    options: ["hardware", "privacy", "processor", "webcam"], 
+    answer: 1,
+    explain: "正確答案：<b>privacy (私隱)</b>。<br>句子提到不想陌生人知道秘密，所以是保護私隱。"
+  },
+  {
+    text: "The ___ on my keyboard is broken. I can't type the letter 'A'.",
+    zh: "我鍵盤上的按鈕壞了。我無法打出字母 'A'。",
+    options: ["sensor", "battery", "wire", "button"], 
+    answer: 3,
+    explain: "正確答案：<b>button (按鈕)</b>。<br>鍵盤上的按鍵就是 button。<br>• battery 是電池；wire 是電線。"
+  },
+  {
+    text: "The company had a data ___ and lost all customer information.",
+    zh: "該公司發生了數據外洩，失去了所有客戶資訊。",
+    options: ["breach", "button", "sensor", "hardware"], 
+    answer: 0,
+    explain: "正確答案：<b>breach (外洩)</b>。<br>Data breach 是固定搭配，指數據外洩。<br>• hardware 是硬體。"
+  },
+  {
+    text: "A ___ can take pictures and videos for your computer.",
+    zh: "網絡攝像機可以為你的電腦拍攝照片和影片。",
+    options: ["processor", "tablet", "webcam", "wire"], 
+    answer: 2,
+    explain: "正確答案：<b>webcam (網絡攝像機)</b>。<br>• processor 是處理器。<br>• tablet 是平板電腦。<br>• wire 是電線。"
+  },
+
+  /* ---------- Q11-Q20: 30 秒 (句子稍長/較難) ---------- */
+  {
+    text: "___ is when criminals try to trick you into giving your password by pretending to be a bank.",
+    zh: "網絡釣魚是指罪犯假裝是銀行，試圖騙取你的密碼。",
+    options: ["Phishing", "Hardware", "Encryption", "Violation"], 
+    answer: 0,
+    explain: "正確答案：<b>Phishing (網絡釣魚)</b>。<br>這是一種常見的網絡詐騙手法。<br>• Encryption 是加密。<br>• Violation 是違反。"
+  },
+  {
+    text: "You must read the terms and ___ before you click 'agree'.",
+    zh: "在點擊「同意」之前，你必須閱讀條款及細則。",
+    options: ["conditions", "details", "sources", "threats"], 
+    answer: 0,
+    explain: "正確答案：<b>conditions (細則)</b>。<br>Terms and conditions 是固定搭配，意思是「條款及細則」。"
+  },
+  {
+    text: "The ___ detects movement and turns on the lights automatically.",
+    zh: "感測器偵測到移動，並自動開燈。",
+    options: ["sensor", "webcam", "account", "button"], 
+    answer: 0,
+    explain: "正確答案：<b>sensor (感測器)</b>。<br>• webcam 是網絡攝像機。<br>• account 是帳戶。"
+  },
+  {
+    text: "Hackers try to ___ into computer systems to steal data.",
+    zh: "黑客試圖入侵電腦系統以竊取數據。",
+    options: ["invade", "disclose", "translate", "install"], 
+    answer: 0,
+    explain: "正確答案：<b>invade (入侵)</b>。<br>• disclose 是公開/洩露。<br>• install 是安裝。"
+  },
+  {
+    text: "___ information, like your ID number or bank details, should be kept secret.",
+    zh: "敏感的資訊，例如你的身份證號碼或銀行資料，應該保密。",
+    options: ["Sensitive", "Biometric", "Wireless", "Portable"], 
+    answer: 0,
+    explain: "正確答案：<b>Sensitive (敏感的)</b>。<br>Sensitive information 指敏感資訊。<br>• Biometric 是生物識別的。<br>• Wireless 是無線的。"
+  },
+  {
+    text: "This computer uses ___ memory (RAM), which allows you to open many apps at the same time.",
+    zh: "這台電腦使用隨機存取記憶體 (RAM)，這讓你可以在同一時間打開很多應用程式。",
+    options: ["random-access", "biometric", "high-end", "wireless"], 
+    answer: 0,
+    explain: "正確答案：<b>random-access</b>。<br>RAM 的全寫是 Random-Access Memory (隨機存取記憶體)。"
+  },
+  {
+    text: "A ___ lock uses your face or fingerprint to unlock your phone.",
+    zh: "生物識別鎖使用你的臉部或指紋來解鎖手機。",
+    options: ["biometric", "suspicious", "hardware", "wireless"], 
+    answer: 0,
+    explain: "正確答案：<b>biometric (生物識別的)</b>。<br>指利用人體特徵（如指紋、面容）來進行識別。"
+  },
+  {
+    text: "Good ___ protects your computer from hackers and viruses.",
+    zh: "良好的網絡安全可以保護你的電腦免受黑客和病毒的侵害。",
+    options: ["cybersecurity", "hardware", "webcam", "battery"], 
+    answer: 0,
+    explain: "正確答案：<b>cybersecurity (網絡安全)</b>。<br>• hardware 是硬體。<br>• webcam 是網絡攝像機。"
+  },
+  {
+    text: "I need to buy new computer ___ because my old computer is too slow.",
+    zh: "我需要買新的電腦硬體，因為我的舊電腦太慢了。",
+    options: ["hardware", "privacy", "breach", "phishing"], 
+    answer: 0,
+    explain: "正確答案：<b>hardware (硬體)</b>。<br>指電腦的實體零件。<br>• privacy 是私隱。<br>• phishing 是網絡釣魚。"
+  },
+  {
+    text: "The police gave a ___ about the dangerous criminal in the area.",
+    zh: "警方就該地區的危險罪犯發出了警告。",
+    options: ["warning", "sensor", "button", "account"], 
+    answer: 0,
+    explain: "正確答案：<b>warning (警告)</b>。<br>• sensor 是感測器。<br>• account 是帳戶。"
+  }
+];
+
+/* ============================================================
+   彈性計時：前10題20秒，後10題30秒
+   ============================================================ */
+function getQuestionTimeLimit(index){
+  if (index < 10) return 20;
+  return 30;
+}
+
+/* ============================================================
+   遊戲邏輯
+   ============================================================ */
+const LETTERS = ["A","B","C","D"];
+
+let current = 0;
+let score = 0;
+let timerId = null;
+let timeLeft = 0;
+let currentTimeLimit = 20;
+let answered = false;
+let wrongQuestionsList = []; 
+
+function startGame(){
+  current = 0;
+  score = 0;
+  wrongQuestionsList = [];
+  document.getElementById("startScreen").classList.add("hidden");
+  document.getElementById("endScreen").classList.add("hidden");
+  document.getElementById("gameScreen").classList.remove("hidden");
+  showQuestion();
+}
+
+function showQuestion(){
+  answered = false;
+  const q = QUESTIONS[current];
+  currentTimeLimit = getQuestionTimeLimit(current);
+
+  document.getElementById("progress").textContent = `第 ${current+1} / ${QUESTIONS.length} 題`;
+  document.getElementById("score").textContent = `得分：${score}`;
+  document.getElementById("limitTag").textContent = `限時 ${currentTimeLimit} 秒`;
+
+  document.getElementById("questionText").innerHTML = q.text;
+  document.getElementById("translationText").innerHTML = q.zh;
+
+  const box = document.getElementById("options");
+  box.innerHTML = "";
+  q.options.forEach((opt, i) => {
+    const btn = document.createElement("button");
+    btn.className = "option";
+    btn.innerHTML = `<span class="letter">${LETTERS[i]}</span><span>${opt}</span>`;
+    btn.onclick = () => choose(i);
+    box.appendChild(btn);
+  });
+
+  const fb = document.getElementById("feedback");
+  fb.classList.add("hidden");
+  fb.className = "feedback hidden";
+  document.getElementById("nextBtn").classList.add("hidden");
+
+  startTimer();
+}
+
+function startTimer(){
+  clearInterval(timerId);
+  timeLeft = currentTimeLimit;
+  renderTimer();
+  timerId = setInterval(() => {
+    timeLeft -= 0.1;
+    if (timeLeft <= 0){
+      timeLeft = 0;
+      renderTimer();
+      clearInterval(timerId);
+      if (!answered) choose(-1); 
+    } else {
+      renderTimer();
+    }
+  }, 100);
+}
+
+function renderTimer(){
+  const pct = (timeLeft / currentTimeLimit) * 100;
+  const bar = document.getElementById("timerBar");
+  bar.style.width = pct + "%";
+  bar.style.background = timeLeft <= 6 ? "#000000" : "#333333";
+  document.getElementById("timerText").textContent = Math.ceil(timeLeft) + "s";
+}
+
+function choose(idx){
+  if (answered) return;
+  answered = true;
+  clearInterval(timerId);
+
+  const q = QUESTIONS[current];
+  const buttons = document.querySelectorAll("#options .option");
+
+  buttons.forEach((btn, i) => {
+    btn.disabled = true;
+    btn.classList.add("disabled");
+    if (i === q.answer) btn.classList.add("correct");
+    if (i === idx && i !== q.answer) btn.classList.add("wrong");
+  });
+
+  const fb = document.getElementById("feedback");
+  fb.classList.remove("hidden");
+
+  if (idx === q.answer){
+    score++;
+    fb.className = "feedback fb-correct";
+    fb.innerHTML = `
+      <div class="fb-title">✓ 正確！</div>
+      <div class="fb-body">${q.explain}</div>`;
+  } else {
+    const chosenText = idx >= 0 ? q.options[idx] : "（超時，沒有作答）";
+    wrongQuestionsList.push({
+      question: q.text,
+      zh: q.zh,
+      chosen: chosenText,
+      correct: q.options[q.answer],
+      explain: q.explain
+    });
+
+    fb.className = "feedback fb-wrong";
+    fb.innerHTML = `
+      <div class="fb-title">✗ 答錯咗</div>
+      <div class="fb-body">
+        <div class="ansrow">你揀咗：<b>${chosenText}</b>　→　正確答案：<b>${q.options[q.answer]}</b></div>
+        ${q.explain}
+      </div>`;
+  }
+
+  document.getElementById("score").textContent = `得分：${score}`;
+
+  const nextBtn = document.getElementById("nextBtn");
+  nextBtn.classList.remove("hidden");
+  nextBtn.textContent = current === QUESTIONS.length - 1 ? "看結果 →" : "下一題 →";
+  nextBtn.focus();
+}
+
+function nextQuestion(){
+  current++;
+  if (current >= QUESTIONS.length){
+    showEnd();
+  } else {
+    showQuestion();
+  }
+}
+
+function showEnd(){
+  clearInterval(timerId);
+  document.getElementById("gameScreen").classList.add("hidden");
+  document.getElementById("endScreen").classList.remove("hidden");
+
+  const pct = Math.round((score / QUESTIONS.length) * 100);
+  document.getElementById("finalScore").textContent = `${score} / ${QUESTIONS.length}`;
+  document.getElementById("finalPct").textContent = `${pct}%`;
+
+  let msg = "";
+  if (pct >= 90) msg = "太棒了！你已經完全掌握這些詞彙！🎉";
+  else if (pct >= 70) msg = "做得很好！再溫習一下錯題，你一定能拿滿分。💪";
+  else if (pct >= 50) msg = "不錯的努力！請重點重溫下面的錯題解釋，會有很大幫助。";
+  else msg = "不要灰心！請仔細閱讀下面的錯題解釋，了解每個詞的意思，再試一次。";
+
+  document.getElementById("finalMsg").innerHTML = msg;
+
+  const summaryBox = document.getElementById("summaryNotes");
+  const notesList = document.getElementById("notesList");
+
+  if (wrongQuestionsList.length === 0) {
+    summaryBox.classList.add("hidden");
+  } else {
+    summaryBox.classList.remove("hidden");
+    let notesHTML = "";
+    
+    wrongQuestionsList.forEach((item, index) => {
+      notesHTML += `
+        <div class="note-item">
+          <div style="margin-bottom:6px; color:#666; font-style:italic;">題目：${item.question}</div>
+          <div style="margin-bottom:8px; color:#666; font-style:italic;">中文：${item.zh}</div>
+          <div style="margin-bottom:8px; color:#000000; font-weight:800;">你答咗：${item.chosen} (正確答案：${item.correct})</div>
+          <div style="color:#333; font-size:0.9rem; line-height:1.6;">${item.explain}</div>
+        </div>
+      `;
+    });
+    notesList.innerHTML = notesHTML;
+  }
+}
+
+document.addEventListener("keydown", (e) => {
+  if (document.getElementById("gameScreen").classList.contains("hidden")) return;
+
+  const key = e.key.toUpperCase();
+  const nextBtn = document.getElementById("nextBtn");
+
+  if (key === "ENTER" && !nextBtn.classList.contains("hidden")){
+    e.preventDefault();
+    nextQuestion();
+    return;
+  }
+  if (answered) return;
+
+  let idx = -1;
+  if ("ABCD".includes(key)) idx = "ABCD".indexOf(key);
+  if ("1234".includes(key)) idx = "1234".indexOf(key);
+
+  if (idx >= 0 && idx < 4){
+    e.preventDefault();
+    choose(idx);
+  }
+});
+</script>
+</body>
+</html>
