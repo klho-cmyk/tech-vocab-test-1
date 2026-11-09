@@ -1,630 +1,571 @@
 <!DOCTYPE html>
-<html lang="zh-HK">
+<html lang="zh-Hant">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Technology Vocab Test 1 Revision</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI 科技詞彙挑戰 | AI Vocabulary Challenge</title>
 <style>
   :root{
-    --bg: #ffffff;
-    --text-main: #000000;
-    --text-sub: #333333;
-    --text-muted: #666666;
-    --border: #000000;
-    --border-light: #cccccc;
-    --bg-light: #f5f5f5;
-    --correct-bg: #000000;
-    --correct-text: #ffffff;
-    --wrong-bg: #e0e0e0;
-    --wrong-text: #000000;
+    --bg:#000;
+    --fg:#fff;
+    --ink:#000;
+    --paper:#fff;
+    --muted:#666;
+    --line:#000;
   }
-  *{box-sizing:border-box;margin:0;padding:0;}
+  *{box-sizing:border-box}
+  html,body{height:100%}
   body{
+    margin:0;
     background:var(--bg);
-    color:var(--text-main);
-    font-family:"Segoe UI","PingFang HK","Microsoft JhengHei",system-ui,sans-serif;
-    min-height:100vh;
-    display:flex;align-items:center;justify-content:center;
-    padding:16px;
+    color:var(--fg);
+    font-family:"Noto Sans TC",system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
+    line-height:1.55;
   }
-  .wrap{width:100%;max-width:800px;}
+  .app{
+    max-width:920px;
+    margin:0 auto;
+    padding:24px 16px 48px;
+  }
   .card{
-    background:#ffffff;
-    border:2px solid var(--border);
-    border-radius:8px;
-    padding:30px 26px;
-    box-shadow:0 10px 30px rgba(0,0,0,0.08);
+    background:var(--paper);
+    color:var(--ink);
+    border:3px solid var(--fg);
+    border-radius:20px;
+    padding:22px;
+    box-shadow:0 0 0 4px #000, 0 0 0 7px #fff;
   }
-  .hidden{display:none !important;}
-
-  /* ---------- 開始畫面 ---------- */
-  #startScreen h1{font-size:1.8rem;letter-spacing:1px;color:var(--text-main);margin-bottom:12px;text-align:center;font-weight:800;}
-  #startScreen .sub{text-align:center;color:var(--text-muted);font-size:.95rem;margin-bottom:24px;letter-spacing:.5px;font-weight:600;}
-  .rulebox{
-    border:2px solid var(--border);
-    border-radius:8px;
-    padding:18px 20px;
-    margin-bottom:24px;
-    background:var(--bg-light);
-    font-size:.95rem;
-    line-height:1.8;
-    color:var(--text-main);
-  }
-  .rulebox b{color:var(--text-main);font-weight:800;}
-  .bigbtn{
-    display:block;width:100%;
-    padding:16px;
-    background:#ffffff;
-    border:2px solid var(--border);
-    border-radius:8px;
-    color:var(--text-main);
-    font-size:1.1rem;
-    letter-spacing:1px;
-    cursor:pointer;
-    transition:.18s;
-    font-family:inherit;
+  h1,h2,h3{margin:0 0 12px;letter-spacing:.02em}
+  h1{font-size:clamp(1.6rem,4vw,2.4rem)}
+  h2{font-size:clamp(1.3rem,3vw,1.8rem)}
+  p{margin:8px 0}
+  .kicker{
+    display:inline-block;
+    border:2px solid var(--ink);
+    border-radius:999px;
+    padding:4px 12px;
+    font-size:.8rem;
     font-weight:700;
-  }
-  .bigbtn:hover{background:var(--text-main);color:#ffffff;}
-
-  /* ---------- 遊戲畫面 ---------- */
-  .topbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;font-size:.95rem;color:var(--text-sub);letter-spacing:.5px;font-weight:600;}
-  .topbar .score{color:var(--text-main);font-weight:800;}
-
-  .timer-row{display:flex;align-items:center;gap:12px;margin-bottom:24px;}
-  .timer-track{flex:1;height:10px;background:#ffffff;border:2px solid var(--border);border-radius:99px;overflow:hidden;}
-  .timer-fill{height:100%;width:100%;background:var(--text-main);border-radius:99px;transition:width 0.1s linear;}
-  .timer-text{font-size:1rem;min-width:45px;text-align:right;color:var(--text-main);font-variant-numeric:tabular-nums;font-weight:800;}
-  .limit-tag{font-size:.85rem;color:var(--text-sub);white-space:nowrap;font-weight:600;}
-
-  .qtext{
-    font-size:1.25rem;
-    line-height:1.7;
-    color:var(--text-main);
+    letter-spacing:.08em;
     margin-bottom:12px;
-    font-weight:600;
   }
-  
-  .q-translation {
-    font-size:1.05rem;
-    color:var(--text-muted);
-    margin-bottom:24px;
-    font-weight:500;
-    padding-bottom: 12px;
-    border-bottom: 1px dashed var(--border-light);
+  .muted{color:var(--muted)}
+  .hidden{display:none!important}
+  .btn{
+    appearance:none;
+    border:2px solid var(--ink);
+    background:var(--ink);
+    color:var(--paper);
+    border-radius:12px;
+    padding:12px 18px;
+    font-size:1rem;
+    font-weight:700;
+    cursor:pointer;
+    transition:transform .08s ease, background .15s ease, color .15s ease;
   }
-
-  .options{display:flex;flex-direction:column;gap:12px;}
+  .btn:hover{transform:translateY(-1px)}
+  .btn:active{transform:translateY(0)}
+  .btn.ghost{
+    background:var(--paper);
+    color:var(--ink);
+  }
+  .btn:disabled{opacity:.45;cursor:not-allowed;transform:none}
+  .topbar{
+    display:flex;
+    flex-wrap:wrap;
+    gap:10px;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:14px;
+  }
+  .stats{
+    display:flex;
+    flex-wrap:wrap;
+    gap:8px;
+  }
+  .pill{
+    border:2px solid var(--ink);
+    border-radius:999px;
+    padding:6px 12px;
+    font-size:.85rem;
+    font-weight:700;
+    white-space:nowrap;
+  }
+  .timer-wrap{
+    height:18px;
+    border:2px solid var(--ink);
+    border-radius:999px;
+    overflow:hidden;
+    background:var(--paper);
+    margin:14px 0 6px;
+  }
+  #timerBar{
+    height:100%;
+    width:100%;
+    background:var(--ink);
+    transition:width .1s linear;
+  }
+  .timer-row{
+    display:flex;
+    justify-content:space-between;
+    gap:12px;
+    font-size:.9rem;
+    font-weight:700;
+    margin-bottom:14px;
+  }
+  .question{
+    border:2px solid var(--ink);
+    border-radius:14px;
+    padding:18px;
+    margin:12px 0 16px;
+    font-size:clamp(1.05rem,2.4vw,1.25rem);
+    font-weight:700;
+    background:var(--paper);
+  }
+  .options{display:grid;gap:10px}
   .option{
-    display:flex;align-items:center;gap:14px;
-    width:100%;padding:14px 16px;
-    background:#ffffff;
-    border:2px solid var(--border-light);
-    border-radius:8px;
-    color:var(--text-main);
-    font-size:1.05rem;
-    font-family:inherit;
+    width:100%;
+    text-align:left;
+    border:2px solid var(--ink);
+    background:var(--paper);
+    color:var(--ink);
+    border-radius:12px;
+    padding:13px 15px;
+    font-size:1rem;
     font-weight:600;
     cursor:pointer;
-    text-align:left;
-    transition:.15s;
+    transition:background .15s ease,color .15s ease,transform .08s ease;
   }
-  .option:hover:not(.disabled){background:var(--text-main);color:#ffffff;border-color:var(--text-main);}
-  .option:hover:not(.disabled) .letter{background:#ffffff;color:var(--text-main);border-color:#ffffff;}
-  
-  .option .letter{
-    display:inline-flex;align-items:center;justify-content:center;
-    width:28px;height:28px;flex:0 0 28px;
-    border-radius:50%;
-    background:var(--bg-light);
-    border:2px solid var(--border-light);
-    font-size:.85rem;
-    color:var(--text-main);
+  .option:hover:not(:disabled){background:var(--ink);color:var(--paper);transform:translateY(-1px)}
+  .option:disabled{cursor:not-allowed}
+  .option.correct{
+    background:var(--ink);
+    color:var(--paper);
+    border-style:double;
+    border-width:4px;
     font-weight:800;
   }
-  .option.disabled{cursor:default;}
-  
-  .option.correct{background:var(--correct-bg);border-color:var(--border);color:var(--correct-text);}
-  .option.correct .letter{background:#ffffff;border-color:#ffffff;color:#000000;}
-  
-  .option.wrong{background:var(--wrong-bg);border-color:var(--border);border-width:3px;color:var(--wrong-text);}
-  .option.wrong .letter{background:#ffffff;border-color:#000000;color:#000000;}
-
-  /* ---------- 回饋 ---------- */
+  .option.wrong{
+    background:var(--paper);
+    color:var(--ink);
+    border-style:dashed;
+    border-width:4px;
+    text-decoration:line-through;
+    font-weight:800;
+  }
   .feedback{
-    margin-top:24px;
-    border-radius:8px;
-    padding:18px 20px;
-    font-size:.98rem;
-    line-height:1.8;
-    animation:fadeIn .25s ease;
+    border:2px solid var(--ink);
+    border-radius:14px;
+    padding:16px;
+    margin-top:16px;
+    background:var(--paper);
   }
-  @keyframes fadeIn{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:none;}}
-  
-  .fb-correct{background:var(--correct-bg);border:2px solid var(--border);color:var(--correct-text);}
-  .fb-wrong{background:#ffffff;border:3px solid var(--border);color:var(--text-main);}
-  
-  .fb-title{font-size:1.1rem;font-weight:800;margin-bottom:10px;letter-spacing:.5px;}
-  .fb-body b{color:inherit;font-weight:800;}
-  .ansrow{margin-bottom:12px;font-weight:700;}
-
-  #nextBtn{
-    margin-top:20px;width:100%;padding:16px;
-    background:#ffffff;border:2px solid var(--border);border-radius:8px;
-    color:var(--text-main);font-size:1.05rem;font-family:inherit;font-weight:800;
-    cursor:pointer;letter-spacing:1px;transition:.18s;
+  .feedback-title{font-weight:900;font-size:1.1rem;margin-bottom:8px}
+  .colloc{
+    display:inline;
+    background:var(--ink);
+    color:var(--paper);
+    padding:1px 6px;
+    border-radius:6px;
+    font-weight:700;
+    box-decoration-break:clone;
+    -webkit-box-decoration-break:clone;
   }
-  #nextBtn:hover{background:var(--text-main);color:#ffffff;}
-
-  /* ---------- 結束畫面 ---------- */
-  #endScreen{text-align:center;}
-  #endScreen h2{font-size:1.6rem;color:var(--text-main);margin-bottom:20px;letter-spacing:1px;font-weight:800;}
-  .finalscore{font-size:3.5rem;color:var(--text-main);letter-spacing:2px;margin-bottom:8px;font-weight:800;}
-  .finalpct{font-size:1.2rem;color:var(--text-sub);margin-bottom:24px;font-weight:700;}
-  #finalMsg{font-size:1rem;line-height:1.8;color:var(--text-main);margin-bottom:30px;font-weight:600;}
-
-  .summary-notes{
-    text-align:left;
-    background:#ffffff;
-    border:2px solid var(--border);
-    border-radius:8px;
-    padding:22px;
-    margin-bottom:30px;
-    max-height:420px;
-    overflow-y:auto;
+  .review{
+    max-height:62vh;
+    overflow:auto;
+    border:2px solid var(--ink);
+    border-radius:14px;
+    padding:10px;
+    margin:14px 0;
+    background:var(--paper);
   }
-  .summary-notes h3{color:var(--text-main);font-size:1.15rem;margin-bottom:16px;border-bottom:3px solid var(--border);padding-bottom:10px;letter-spacing:1px;font-weight:800;}
-  .note-item{
-    background:var(--bg-light);
-    border-left:6px solid var(--border);
-    padding:14px 16px;
-    border-radius:0 6px 6px 0;
-    margin-bottom:14px;
-    font-size:.92rem;
-    line-height:1.7;
-    color:var(--text-main);
+  .review-item{
+    border-bottom:2px dashed var(--ink);
+    padding:10px 6px;
+    font-size:.95rem;
   }
-  .note-item .ntag{display:block;color:var(--text-main);font-size:.85rem;margin-bottom:8px;letter-spacing:0.5px;font-weight:800;text-transform:uppercase;}
-  .note-item b{color:var(--text-main);font-weight:800;}
-
-  @media(max-width:520px){
-    .card{padding:20px 16px; border-width: 1px;}
-    .qtext{font-size:1.15rem;}
-    #startScreen h1{font-size:1.5rem;}
-    .finalscore{font-size:2.5rem;}
-    .option{font-size:1rem;}
+  .review-item:last-child{border-bottom:0}
+  .review-answer{font-weight:900}
+  .small{font-size:.88rem}
+  .center{text-align:center}
+  @media (max-width:560px){
+    .card{padding:16px;border-radius:16px}
+    .option{font-size:.96rem}
   }
 </style>
 </head>
 <body>
-<div class="wrap">
+<div class="app">
 
+  <!-- START -->
   <section id="startScreen" class="card">
-    <h1>💻 Technology Vocab 溫習</h1>
-    <p class="sub">Vocab Test 1 (Application, Convenience, Biotechnology, Devices)</p>
-    <div class="rulebox">
-      這是一個為你準備的溫習遊戲：<br>
-      • 每題都有<b>中文翻譯</b>，幫你理解句子。<br>
-      • 答錯會有<b>詳細中文解釋</b>，話你知點解。<br>
-      • 句子會慢慢變長，<b>時間亦會自動調整</b>（20秒 ➔ 30秒）。<br>
-      • 測驗結束後有<b>錯題總結</b>，方便你重點重溫。<br><br>
-      📝 共 <b>22 題</b>｜選擇題格式
-    </div>
-    <button class="bigbtn" onclick="startGame()">開始溫習 ▶</button>
+    <div class="kicker">AI GAME · TECHNOLOGY VOCAB</div>
+    <h1>AI 科技詞彙挑戰</h1>
+    <p class="muted">AI Vocabulary Challenge · 黑白簡約版</p>
+    <p><strong>玩法：</strong></p>
+    <ul>
+      <li>每題有時間限制，難度越高，時間越短。</li>
+      <li>答錯或超時，該題會在本回合再次出現。</li>
+      <li>遊戲不會結束，直到所有題目都答對。</li>
+      <li>每題答案位置隨機，唔會固定 A/B/C/D。</li>
+      <li>答題後會顯示中文解釋及常見搭配。</li>
+    </ul>
+    <p><strong>時間設定：</strong> Easy 22 秒 · Medium 16 秒 · Hard 12 秒</p>
+    <button id="startBtn" class="btn">開始遊戲</button>
   </section>
 
+  <!-- GAME -->
   <section id="gameScreen" class="card hidden">
     <div class="topbar">
-      <span id="progress">第 1 / 22 題</span>
-      <span class="score" id="score">得分：0</span>
+      <div class="stats">
+        <span class="pill" id="remainingStat">剩餘：--</span>
+        <span class="pill" id="masteredStat">已掌握：--</span>
+        <span class="pill" id="mistakeStat">錯誤：--</span>
+      </div>
+      <span class="pill" id="difficultyStat">難度：--</span>
     </div>
 
+    <div class="timer-wrap"><div id="timerBar"></div></div>
     <div class="timer-row">
-      <div class="timer-track"><div class="timer-fill" id="timerBar"></div></div>
-      <div class="timer-text" id="timerText">20s</div>
-      <div class="limit-tag" id="limitTag">限時 20 秒</div>
+      <span id="timerText">-- 秒</span>
+      <span id="queueText" class="muted">本回合題目：--</span>
     </div>
 
-    <div id="questionText" class="qtext"></div>
-    <div id="translationText" class="q-translation"></div>
-
+    <div id="questionText" class="question"></div>
     <div id="options" class="options"></div>
 
     <div id="feedback" class="feedback hidden"></div>
-
-    <button id="nextBtn" class="hidden" onclick="nextQuestion()">下一題 →</button>
+    <div class="center" style="margin-top:16px;">
+      <button id="nextBtn" class="btn hidden">下一題</button>
+    </div>
   </section>
 
+  <!-- END -->
   <section id="endScreen" class="card hidden">
-    <h2>溫習完成！</h2>
-    <div class="finalscore" id="finalScore">0 / 22</div>
-    <div class="finalpct" id="finalPct">0%</div>
-    
-    <div id="finalMsg"></div>
-
-    <div id="summaryNotes" class="summary-notes hidden">
-      <h3>📝 錯題重點溫習 (Summary Notes)</h3>
-      <div id="notesList"></div>
-    </div>
-
-    <button class="bigbtn" onclick="startGame()">再溫習一次 ↻</button>
+    <div class="kicker">COMPLETE</div>
+    <h2>全部答對！</h2>
+    <p id="endSummary"></p>
+    <h3>回顧總結 · 中文解釋</h3>
+    <div id="review" class="review"></div>
+    <button id="restartBtn" class="btn">再玩一次</button>
   </section>
 
 </div>
 
 <script>
 /* ============================================================
-   題庫：22 題 (Vocab Test 1)
-   答案位置已完全打散，包含中文翻譯及解釋。
+   QUESTION BANK
+   diff: easy / medium / hard
+   a: correct answer
+   meaning: Chinese meaning
+   colloc: common collocations
+   distractors: 3 wrong options
    ============================================================ */
 const QUESTIONS = [
-  /* ---------- Q1-Q11: 20 秒 (Application & Convenience) ---------- */
-  {
-    text: "This shop offers both expensive gaming PCs as well as ___ consoles for people on a budget.",
-    zh: "這家店既提供昂貴的遊戲電腦，也為預算有限的顧客提供低成本的遊戲機。",
-    options: ["low-cost", "high-end", "portable", "accurate"], 
-    answer: 0,
-    explain: "正確答案：<b>low-cost (低成本的)</b>。<br>句子提到 people on a budget（預算有限的人），所以應該是便宜的、低成本的。"
-  },
-  {
-    text: "They also have ___ devices to take with you on the go.",
-    zh: "他們也有方便隨身攜帶的便攜式設備。",
-    options: ["waterproof", "portable", "real time", "low-cost"], 
-    answer: 1,
-    explain: "正確答案：<b>portable (便攜的)</b>。<br>take with you on the go (隨身攜帶) 提示了設備是輕便、容易帶走的。"
-  },
-  {
-    text: "With the card scanner, customers can use this quick ___ that is both safe and convenient.",
-    zh: "有了讀卡機，顧客可以使用這種既安全又方便的快速付款方式。",
-    options: ["hoverboard", "chatbot", "payment method", "translation"], 
-    answer: 2,
-    explain: "正確答案：<b>payment method (付款方式)</b>。<br>讀卡機對應的是付款。選項中只有 payment method 是付款方式。"
-  },
-  {
-    text: "With the card scanner, customers can use this quick payment method that is both safe and ___.",
-    zh: "有了讀卡機，顧客可以使用這種既安全又方便的快速付款方式。",
-    options: ["suspicious", "convenient", "accurate", "real time"], 
-    answer: 1,
-    explain: "正確答案：<b>convenient (方便的)</b>。<br>句子中 safe and ___ (安全和...)，最常見的搭配就是方便 (convenient)。"
-  },
-  {
-    text: "If you have any questions, simply scan the ___ using your phone's camera.",
-    zh: "如果你有任何問題，只需用手機鏡頭掃描二維碼。",
-    options: ["QR code", "graphics", "retina", "button"], 
-    answer: 0,
-    explain: "正確答案：<b>QR code (二維碼)</b>。<br>scan (掃描) + 手機鏡頭，最直接對應的就是二維碼。"
-  },
-  {
-    text: "You will then be asked to download our app which will allow you to talk with our state-of-the-art ___.",
-    zh: "然後你會被要求下載我們的應用程式，它允許你與我們最先進的聊天機器人交談。",
-    options: ["drone", "processor", "chatbot", "smartwatch"], 
-    answer: 2,
-    explain: "正確答案：<b>chatbot (聊天機器人)</b>。<br>句子提到 talk with (與...交談)，所以是能對話的 AI，即 chatbot。"
-  },
-  {
-    text: "This app can ___ 50 languages from voice to text.",
-    zh: "這個應用程式可以將 50 種語言的語音翻譯成文字。",
-    options: ["track", "translate", "interact", "hack"], 
-    answer: 1,
-    explain: "正確答案：<b>translate (翻譯)</b>。<br>把語言從 voice (語音) 轉成 text (文字)，這個動作就是翻譯。"
-  },
-  {
-    text: "This app can translate 50 languages from voice to text in ___, making it an invaluable tool for tourists.",
-    zh: "這個應用程式可以即時將 50 種語言的語音翻譯成文字，這使它成為遊客的無價工具。",
-    options: ["offline", "slow motion", "the future", "real time"], 
-    answer: 3,
-    explain: "正確答案：<b>real time (即時)</b>。<br>in real time 是固定搭配，意思是「即時地」，沒有延遲。"
-  },
-  {
-    text: "It does make mistakes sometimes, but it is fairly ___ overall.",
-    zh: "它有時確實會出錯，但總體來說相當準確。",
-    options: ["accurate", "waterproof", "portable", "autonomous"], 
-    answer: 0,
-    explain: "正確答案：<b>accurate (準確的)</b>。<br>句子前半句說「有時會出錯」，後半句用 but (但是) 轉折，所以總體還是「準確」的。"
-  },
-  {
-    text: "In a major breakthrough, scientists have finally developed a real ___ which allows users to stand on it and float in mid-air.",
-    zh: "在重大突破中，科學家終於開發出了一個真正的懸浮滑板，允許使用者站在上面並在半空中漂浮。",
-    options: ["drone", "hoverboard", "smartwatch", "chatbot"], 
-    answer: 1,
-    explain: "正確答案：<b>hoverboard (懸浮滑板)</b>。<br>stand on it and float in mid-air (站在上面並在半空中漂浮) 正是 hoverboard 的特徵。"
-  },
-  {
-    text: "However, they are not ___, so they cannot be used on water.",
-    zh: "然而，它們不防水，所以不能在水上使用。",
-    options: ["heavy", "expensive", "waterproof", "alive"], 
-    answer: 2,
-    explain: "正確答案：<b>waterproof (防水的)</b>。<br>句子提到 cannot be used on water (不能在水上使用)，因為它不防水。"
-  },
+  // ---------- VOCAB TEST 1 ----------
+  {id:1, diff:"easy", q:"This shop offers both expensive gaming PCs as well as ______ consoles for people on a budget.", a:"low-cost", meaning:"低成本的；廉價的", colloc:"low-cost housing / low-cost airline / low-cost option", distractors:["accurate","waterproof","suspicious"]},
+  {id:2, diff:"easy", q:"They also have ______ devices to take with you on the go.", a:"portable", meaning:"便携的；可攜帶的", colloc:"portable device / portable charger / portable speaker", distractors:["payment method","QR code","heart rate"]},
+  {id:3, diff:"medium", q:"With the card scanner, customers can use this quick ______ that is both safe and convenient.", a:"payment method", meaning:"支付方式", colloc:"mobile payment method / secure payment method / payment method", distractors:["retinal scan","graphics card","processor"]},
+  {id:4, diff:"easy", q:"With the card scanner, customers can use this quick payment method that is both safe and ______.", a:"convenient", meaning:"方便的", colloc:"convenient for / convenient location / convenient way", distractors:["suspicious","irresponsibly","anonymously"]},
+  {id:5, diff:"easy", q:"If you have any questions, simply scan the ______ using your phone's camera.", a:"QR code", meaning:"二維碼", colloc:"scan a QR code / QR code scanner / generate a QR code", distractors:["retinal scan","graphics card","processor"]},
+  {id:6, diff:"medium", q:"You will then be asked to download our app which will allow you to talk with our state-of-the-art ______.", a:"chatbot", meaning:"聊天機器人", colloc:"AI chatbot / customer service chatbot / chat with a chatbot", distractors:["smartwatch","drone","camera"]},
+  {id:7, diff:"easy", q:"This app can ______ 50 languages from voice to text in real time.", a:"translate", meaning:"翻譯", colloc:"translate A into B / translate from ... to ... / translate accurately", distractors:["track","hack","interact"]},
+  {id:8, diff:"medium", q:"This app can translate 50 languages from voice to text in ______, making it an invaluable tool for tourists.", a:"real time", meaning:"實時；即時", colloc:"in real time / real-time translation / real-time data", distractors:["heart rate","low-cost","facial recognition"]},
+  {id:9, diff:"easy", q:"It does make mistakes sometimes, but it is fairly ______ overall.", a:"accurate", meaning:"準確的", colloc:"accurate information / accurate measurement / highly accurate", distractors:["suspicious","addicted","waterproof"]},
+  {id:10, diff:"medium", q:"In a major breakthrough, scientists have finally developed a real ______ which allows users to stand on it and float in mid-air.", a:"hoverboard", meaning:"懸浮滑板", colloc:"ride a hoverboard / real hoverboard / hoverboard accident", distractors:["drone","smartwatch","chatbot"]},
+  {id:11, diff:"easy", q:"However, they are not ______ and cannot be used on water.", a:"waterproof", meaning:"防水的", colloc:"waterproof jacket / waterproof phone / waterproof material", distractors:["accurate","convenient","suspicious"]},
+  {id:12, diff:"easy", q:"This ______, which you wear on your wrist, can track various important health data.", a:"smartwatch", meaning:"智能手錶", colloc:"wear a smartwatch / smartwatch app / smartwatch features", distractors:["drone","camera","processor"]},
+  {id:13, diff:"easy", q:"It can ______ various important health data, such as the wearer's heart rate and skin temperature.", a:"track", meaning:"追蹤；記錄", colloc:"track your health / track progress / track data", distractors:["translate","hack","communicate"]},
+  {id:14, diff:"easy", q:"It can track various important health data, such as the wearer's ______ and skin temperature.", a:"heart rate", meaning:"心率", colloc:"measure your heart rate / resting heart rate / heart rate monitor", distractors:["QR code","real time","retinal scan"]},
+  {id:15, diff:"hard", q:"The high-security bank vault uses a high-tech device which takes a ______ of a person's eye before unlocking.", a:"retinal scan", meaning:"視網膜掃描", colloc:"retinal scan technology / pass a retinal scan / retinal scanner", distractors:["QR code","payment method","graphics card"]},
+  {id:16, diff:"easy", q:"The ______ comes with a built-in camera which can be used to take photos and videos from the sky.", a:"drone", meaning:"無人機", colloc:"fly a drone / drone camera / drone delivery", distractors:["smartwatch","chatbot","processor"]},
+  {id:17, diff:"easy", q:"The drone comes with a built-in ______ which can be used to take photos and videos from the sky.", a:"camera", meaning:"相機；攝像頭", colloc:"built-in camera / digital camera / camera lens", distractors:["processor","health app","payment method"]},
+  {id:18, diff:"medium", q:"After entering your symptoms into the ______, it will list some possible diseases or ailments related to the given symptoms.", a:"health app", meaning:"健康應用程式", colloc:"download a health app / health app data / use a health app", distractors:["smartwatch","chatbot","terms and conditions"]},
+  {id:19, diff:"medium", q:"After entering your symptoms into the health app, it will list some possible ______ or ailments related to the given symptoms.", a:"diseases", meaning:"疾病", colloc:"infectious diseases / chronic diseases / rare diseases", distractors:["specifications","criminals","graphics"]},
+  {id:20, diff:"hard", q:"Zack thought he might need to buy a new gaming computer as the ______ for latest games were very demanding.", a:"specifications", meaning:"規格；配置要求", colloc:"technical specifications / product specifications / meet the specifications", distractors:["diseases","personal details","terms and conditions"]},
+  {id:21, diff:"medium", q:"He needed a new ______ card and a new processor.", a:"graphics", meaning:"圖像；顯卡（graphics card）", colloc:"graphics card / computer graphics / graphics performance", distractors:["processor","health app","payment method"]},
+  {id:22, diff:"medium", q:"He needed a new graphics card and a new ______.", a:"processor", meaning:"處理器", colloc:"computer processor / fast processor / processor speed", distractors:["camera","chatbot","hoverboard"]},
 
-  /* ---------- Q12-Q22: 30 秒 (Biotechnology & Devices) ---------- */
-  {
-    text: "This ___ which you wear on your wrist can track various important health data.",
-    zh: "這款戴在手腕上的智能手錶可以追蹤各種重要的健康數據。",
-    options: ["camera", "drone", "smartwatch", "processor"], 
-    answer: 2,
-    explain: "正確答案：<b>smartwatch (智能手錶)</b>。<br>wear on your wrist (戴在手腕上) 提示了是手錶，加上能追蹤健康數據，所以是智能手錶。"
-  },
-  {
-    text: "This smartwatch can ___ various important health data, such as the wearer's heart rate and skin temperature.",
-    zh: "這款智能手錶可以追蹤各種重要的健康數據，例如佩戴者的心率和皮膚溫度。",
-    options: ["track", "translate", "download", "scan"], 
-    answer: 0,
-    explain: "正確答案：<b>track (追蹤)</b>。<br>手錶紀錄並監測健康數據的動詞通常用 track。"
-  },
-  {
-    text: "It can track various important health data, such as the wearer's ___ and skin temperature.",
-    zh: "它可以追蹤各種重要的健康數據，例如佩戴者的心率和皮膚溫度。",
-    options: ["QR code", "payment method", "heart rate", "graphics card"], 
-    answer: 2,
-    explain: "正確答案：<b>heart rate (心率)</b>。<br>與 skin temperature (皮膚溫度) 並列的健康數據，當然是心率。"
-  },
-  {
-    text: "The high-security bank vault uses a high-tech device which takes a ___ of a person's eye before unlocking for them.",
-    zh: "高安全性的銀行金庫使用了一種高科技設備，在為人解鎖前會對人的眼睛進行視網膜掃描。",
-    options: ["camera", "retinal scan", "fingerprint", "password"], 
-    answer: 1,
-    explain: "正確答案：<b>retinal scan (視網膜掃描)</b>。<br>句子提到 of a person's eye (人的眼睛)，所以是視網膜掃描。"
-  },
-  {
-    text: "The ___ comes with a built-in camera which can be used to take photos and videos from the sky.",
-    zh: "這款無人機配有內置鏡頭，可用於從空中拍攝照片和影片。",
-    options: ["laptop", "smartphone", "hoverboard", "drone"], 
-    answer: 3,
-    explain: "正確答案：<b>drone (無人機)</b>。<br>from the sky (從天空中) 提示了會飛的設備，即無人機。"
-  },
-  {
-    text: "The drone comes with a built-in ___ which can be used to take photos and videos from the sky.",
-    zh: "這款無人機配有內置鏡頭，可用於從空中拍攝照片和影片。",
-    options: ["screen", "camera", "battery", "button"], 
-    answer: 1,
-    explain: "正確答案：<b>camera (鏡頭/相機)</b>。<br>take photos and videos (拍照和錄影) 需要用到的設備是鏡頭。"
-  },
-  {
-    text: "After entering your symptoms into the ___, it will list some possible diseases.",
-    zh: "將你的症狀輸入健康應用程式後，它會列出一些可能的疾病。",
-    options: ["chatbot", "health app", "drone", "video game"], 
-    answer: 1,
-    explain: "正確答案：<b>health app (健康應用程式)</b>。<br>輸入 symptoms (症狀) 並得到 diseases (疾病) 結果的，是健康應用程式。"
-  },
-  {
-    text: "After entering your symptoms into the health app, it will list some possible ___ or ailments related to the given symptoms.",
-    zh: "將你的症狀輸入健康應用程式後，它會列出一些與給定症狀相關的可能疾病或不適。",
-    options: ["graphics", "diseases", "payment methods", "specifications"], 
-    answer: 1,
-    explain: "正確答案：<b>diseases (疾病)</b>。<br>與 ailments (小病/不適) 並列的詞是 diseases。"
-  },
-  {
-    text: "Zack thought he might need to buy a new gaming computer as the ___ for the latest games were very demanding.",
-    zh: "扎克認為他可能需要買一台新的遊戲電腦，因為最新遊戲的規格要求非常高。",
-    options: ["specifications", "processors", "graphics", "prices"], 
-    answer: 0,
-    explain: "正確答案：<b>specifications (規格)</b>。<br>遊戲對電腦的要求稱為 specifications (規格)。"
-  },
-  {
-    text: "He needed a new ___ card and a new processor.",
-    zh: "他需要一張新的顯示卡和一個新的處理器。",
-    options: ["memory", "graphics", "battery", "network"], 
-    answer: 1,
-    explain: "正確答案：<b>graphics (圖像/顯示)</b>。<br>graphics card 是固定搭配，意思是「顯示卡」。"
-  },
-  {
-    text: "He needed a new graphics card and a new ___.",
-    zh: "他需要一張新的顯示卡和一個新的處理器。",
-    options: ["processor", "monitor", "keyboard", "mouse"], 
-    answer: 0,
-    explain: "正確答案：<b>processor (處理器)</b>。<br>與 graphics card (顯示卡) 並列的電腦核心硬件是處理器。"
-  }
+  // ---------- VOCAB TEST 2 ----------
+  {id:23, diff:"easy", q:"Whenever you receive an ______ you should always be cautious about opening any attachments as they may contain a virus which will harm your device.", a:"email", meaning:"電郵", colloc:"send an email / receive an email / email attachment", distractors:["virus","suspicious","hacking"]},
+  {id:24, diff:"easy", q:"Whenever you receive an email you should always be cautious about opening any attachments as they may contain a ______ which will harm your device.", a:"virus", meaning:"病毒", colloc:"computer virus / virus infection / spread a virus", distractors:["email","account","camera"]},
+  {id:25, diff:"medium", q:"I got a ______ message from someone I did not know on my phone.", a:"suspicious", meaning:"可疑的", colloc:"suspicious activity / suspicious message / suspicious behaviour", distractors:["accurate","convenient","portable"]},
+  {id:26, diff:"hard", q:"It seemed like they were trying to get ______ about me, such as my date of birth and ID number.", a:"sensitive information", meaning:"敏感資料", colloc:"sensitive information / protect sensitive information / leak sensitive information", distractors:["terms and conditions","specifications","graphics"]},
+  {id:27, diff:"easy", q:"I blocked them immediately so they can no longer ______ with me.", a:"communicate", meaning:"溝通；交流（亦可作 interact）", colloc:"communicate with / communicate clearly / communicate effectively", distractors:["translate","track","hack"]},
+  {id:28, diff:"medium", q:"This forum is well known as a place where online ______ come to discuss hacking and other forms of computer crime.", a:"criminals", meaning:"罪犯", colloc:"online criminals / catch criminals / cyber criminals", distractors:["diseases","specifications","processors"]},
+  {id:29, diff:"medium", q:"This forum is well known as a place where online criminals come to discuss ______ and other forms of computer crime.", a:"hacking", meaning:"黑客入侵；非法侵入", colloc:"hacking attack / computer hacking / prevent hacking", distractors:["translate","track","communicate"]},
+  {id:30, diff:"hard", q:"They feel safe posting here because users can upload comments ______.", a:"anonymously", meaning:"匿名地", colloc:"post anonymously / browse anonymously / speak anonymously", distractors:["portable","waterproof","generative"]},
+  {id:31, diff:"hard", q:"______ such as Facebook and Instagram, are a great way for people to keep in touch with their friends and family.", a:"Social networking sites", meaning:"社交網站", colloc:"social networking sites / use social networking sites / social networking site", distractors:["large language models","health app","payment method"]},
+  {id:32, diff:"medium", q:"Social networking sites such as Facebook and Instagram, are a great way for people to ______ with their friends and family.", a:"keep in touch", meaning:"保持聯絡", colloc:"keep in touch with / stay in touch / keep in touch online", distractors:["translate","track","hack"]},
+  {id:33, diff:"medium", q:"Still, you should be careful not to post too many ______ as that information may be misused.", a:"personal details", meaning:"個人資料", colloc:"provide personal details / share personal details / protect personal details", distractors:["specifications","graphics","processor"]},
+  {id:34, diff:"hard", q:"______ which is a form of virtual bullying, is against the terms and conditions of this website.", a:"Online shaming", meaning:"網絡羞辱；網絡公審", colloc:"online shaming / online shaming campaign / victims of online shaming", distractors:["hacking","plagiarism","artificial intelligence"]},
+  {id:35, diff:"hard", q:"Online shaming which is a form of virtual bullying, is against the ______ of this website.", a:"terms and conditions", meaning:"條款及細則", colloc:"read the terms and conditions / accept the terms and conditions / terms and conditions apply", distractors:["specifications","personal details","sensitive information"]},
+  {id:36, diff:"easy", q:"Anyone who breaks the rules will have their ______ suspended.", a:"account", meaning:"帳戶", colloc:"create an account / social media account / account suspended", distractors:["processor","graphics","drone"]},
+  {id:37, diff:"hard", q:"Sometimes I wonder if there will be ______ robots in the future.", a:"autonomous", meaning:"自主的；自動駕駛的", colloc:"autonomous vehicle / autonomous robot / autonomous system", distractors:["low-skilled","addicted","suspicious"]},
+  {id:38, diff:"medium", q:"If so, they may be used to replace certain ______ workers whose tasks are repetitive.", a:"low-skilled", meaning:"低技術的；低技能的", colloc:"low-skilled workers / low-skilled jobs / low-skilled labour", distractors:["suspicious","waterproof","portable"]},
+  {id:39, diff:"hard", q:"This new smartphone makes heavy use of ______ technology, replacing passwords in some apps.", a:"facial recognition", meaning:"面部識別", colloc:"facial recognition technology / facial recognition system / facial recognition software", distractors:["large language models","plagiarism","prohibition"]},
+  {id:40, diff:"hard", q:"However, critics argue that the technology was developed ______ as reports suggest it fails for certain skin tones.", a:"irresponsibly", meaning:"不負責任地", colloc:"act irresponsibly / use technology irresponsibly / behave irresponsibly", distractors:["low-cost","portable","waterproof"]},
+  {id:41, diff:"hard", q:"With the growing popularity of ______ such as Grok and OpenAI, many teachers are warning that they could be used for plagiarism by some dishonest students.", a:"large language models", meaning:"大型語言模型", colloc:"large language models / train large language models / use large language models", distractors:["social networking sites","health app","payment method"]},
+  {id:42, diff:"hard", q:"With the growing popularity of large language models such as Grok and OpenAI, many teachers are warning that they could be used for ______ by some dishonest students.", a:"plagiarism", meaning:"抄襲；剽竊", colloc:"commit plagiarism / plagiarism checker / avoid plagiarism", distractors:["translate","track","communicate"]},
+  {id:43, diff:"hard", q:"Some governments have considered putting a ______ on the further development of artificial intelligence, which can think and learn on its own.", a:"prohibition", meaning:"禁止；禁令", colloc:"impose a prohibition / prohibition on / lift a prohibition", distractors:["account","email","virus"]},
+  {id:44, diff:"hard", q:"Some governments have considered putting a prohibition on the further development of ______, which can think and learn on its own.", a:"artificial intelligence", meaning:"人工智能", colloc:"artificial intelligence technology / develop artificial intelligence / artificial intelligence system", distractors:["social networking sites","health app","payment method"]},
+  {id:45, diff:"medium", q:"I think Mark has become ______ to making generative artwork online.", a:"addicted", meaning:"上癮的；沉迷的", colloc:"addicted to / become addicted / addicted to something", distractors:["accurate","convenient","waterproof"]},
+  {id:46, diff:"hard", q:"He spends hours every day putting in prompts to create new ______ artwork and share them on social media.", a:"generative", meaning:"生成式的", colloc:"generative AI / generative artwork / generative model", distractors:["heart rate","retinal scan","QR code"]}
 ];
 
 /* ============================================================
-   彈性計時：前11題20秒，後11題30秒
+   GAME STATE
    ============================================================ */
-function getQuestionTimeLimit(index){
-  if (index < 11) return 20;
-  return 30;
-}
+const DIFF_TIME = { easy:22, medium:16, hard:12 };
+const DIFF_LABEL = { easy:"Easy", medium:"Medium", hard:"Hard" };
 
-/* ============================================================
-   遊戲邏輯
-   ============================================================ */
-const LETTERS = ["A","B","C","D"];
-
-let current = 0;
-let score = 0;
+let queue = [];
+let current = null;
+let currentOptions = [];
+let mastered = new Set();
+let mistakes = {};
 let timerId = null;
 let timeLeft = 0;
-let currentTimeLimit = 20;
+let timeLimit = 0;
 let answered = false;
-let wrongQuestionsList = []; 
+let lastCorrect = false;
+let totalMistakes = 0;
 
-function startGame(){
-  current = 0;
-  score = 0;
-  wrongQuestionsList = [];
-  document.getElementById("startScreen").classList.add("hidden");
-  document.getElementById("endScreen").classList.add("hidden");
-  document.getElementById("gameScreen").classList.remove("hidden");
-  showQuestion();
+/* Elements */
+const startScreen = document.getElementById("startScreen");
+const gameScreen = document.getElementById("gameScreen");
+const endScreen = document.getElementById("endScreen");
+const startBtn = document.getElementById("startBtn");
+const restartBtn = document.getElementById("restartBtn");
+const nextBtn = document.getElementById("nextBtn");
+const questionText = document.getElementById("questionText");
+const optionsEl = document.getElementById("options");
+const feedback = document.getElementById("feedback");
+const timerBar = document.getElementById("timerBar");
+const timerText = document.getElementById("timerText");
+const queueText = document.getElementById("queueText");
+const remainingStat = document.getElementById("remainingStat");
+const masteredStat = document.getElementById("masteredStat");
+const mistakeStat = document.getElementById("mistakeStat");
+const difficultyStat = document.getElementById("difficultyStat");
+const endSummary = document.getElementById("endSummary");
+const review = document.getElementById("review");
+
+/* ============================================================
+   HELPERS
+   ============================================================ */
+function shuffle(arr){
+  const a = arr.slice();
+  for(let i=a.length-1;i>0;i--){
+    const j = Math.floor(Math.random()*(i+1));
+    [a[i],a[j]] = [a[j],a[i]];
+  }
+  return a;
 }
 
-function showQuestion(){
-  answered = false;
-  const q = QUESTIONS[current];
-  currentTimeLimit = getQuestionTimeLimit(current);
+function makeOptions(q){
+  const opts = [
+    {text:q.a, correct:true},
+    ...q.distractors.map(t=>({text:t, correct:false}))
+  ];
+  return shuffle(opts);
+}
 
-  document.getElementById("progress").textContent = `第 ${current+1} / ${QUESTIONS.length} 題`;
-  document.getElementById("score").textContent = `得分：${score}`;
-  document.getElementById("limitTag").textContent = `限時 ${currentTimeLimit} 秒`;
+function updateStats(){
+  remainingStat.textContent = "剩餘：" + (QUESTIONS.length - mastered.size);
+  masteredStat.textContent = "已掌握：" + mastered.size + " / " + QUESTIONS.length;
+  mistakeStat.textContent = "錯誤：" + totalMistakes;
+  queueText.textContent = "本回合題目：" + queue.length;
+}
 
-  document.getElementById("questionText").innerHTML = q.text;
-  document.getElementById("translationText").innerHTML = q.zh;
+function stopTimer(){
+  if(timerId){
+    clearInterval(timerId);
+    timerId = null;
+  }
+}
 
-  const box = document.getElementById("options");
-  box.innerHTML = "";
-  q.options.forEach((opt, i) => {
-    const btn = document.createElement("button");
-    btn.className = "option";
-    btn.innerHTML = `<span class="letter">${LETTERS[i]}</span><span>${opt}</span>`;
-    btn.onclick = () => choose(i);
-    box.appendChild(btn);
-  });
-
-  const fb = document.getElementById("feedback");
-  fb.classList.add("hidden");
-  fb.className = "feedback hidden";
-  document.getElementById("nextBtn").classList.add("hidden");
-
-  startTimer();
+function updateTimerBar(){
+  const pct = timeLimit > 0 ? Math.max(0, timeLeft / timeLimit * 100) : 0;
+  timerBar.style.width = pct + "%";
+  timerText.textContent = Math.max(0, Math.ceil(timeLeft)) + " 秒";
 }
 
 function startTimer(){
-  clearInterval(timerId);
-  timeLeft = currentTimeLimit;
-  renderTimer();
-  timerId = setInterval(() => {
+  stopTimer();
+  timeLeft = timeLimit;
+  updateTimerBar();
+  timerId = setInterval(()=>{
+    if(answered) return;
     timeLeft -= 0.1;
-    if (timeLeft <= 0){
+    if(timeLeft <= 0){
       timeLeft = 0;
-      renderTimer();
-      clearInterval(timerId);
-      if (!answered) choose(-1); 
-    } else {
-      renderTimer();
+      updateTimerBar();
+      stopTimer();
+      handleAnswer(null);
+      return;
     }
-  }, 100);
+    updateTimerBar();
+  },100);
 }
 
-function renderTimer(){
-  const pct = (timeLeft / currentTimeLimit) * 100;
-  const bar = document.getElementById("timerBar");
-  bar.style.width = pct + "%";
-  bar.style.background = timeLeft <= 6 ? "#000000" : "#333333";
-  document.getElementById("timerText").textContent = Math.ceil(timeLeft) + "s";
+/* ============================================================
+   GAME FLOW
+   ============================================================ */
+function startGame(){
+  queue = shuffle(QUESTIONS);
+  current = null;
+  currentOptions = [];
+  mastered = new Set();
+  mistakes = {};
+  totalMistakes = 0;
+  answered = false;
+  lastCorrect = false;
+  stopTimer();
+
+  startScreen.classList.add("hidden");
+  endScreen.classList.add("hidden");
+  gameScreen.classList.remove("hidden");
+  feedback.classList.add("hidden");
+  nextBtn.classList.add("hidden");
+
+  updateStats();
+  loadNext();
 }
 
-function choose(idx){
-  if (answered) return;
-  answered = true;
-  clearInterval(timerId);
+function loadNext(){
+  stopTimer();
+  answered = false;
+  lastCorrect = false;
+  feedback.classList.add("hidden");
+  nextBtn.classList.add("hidden");
+  optionsEl.innerHTML = "";
+  questionText.textContent = "";
 
-  const q = QUESTIONS[current];
-  const buttons = document.querySelectorAll("#options .option");
-
-  buttons.forEach((btn, i) => {
-    btn.disabled = true;
-    btn.classList.add("disabled");
-    if (i === q.answer) btn.classList.add("correct");
-    if (i === idx && i !== q.answer) btn.classList.add("wrong");
-  });
-
-  const fb = document.getElementById("feedback");
-  fb.classList.remove("hidden");
-
-  if (idx === q.answer){
-    score++;
-    fb.className = "feedback fb-correct";
-    fb.innerHTML = `
-      <div class="fb-title">✓ 正確！</div>
-      <div class="fb-body">${q.explain}</div>`;
-  } else {
-    const chosenText = idx >= 0 ? q.options[idx] : "（超時，沒有作答）";
-    wrongQuestionsList.push({
-      question: q.text,
-      zh: q.zh,
-      chosen: chosenText,
-      correct: q.options[q.answer],
-      explain: q.explain
-    });
-
-    fb.className = "feedback fb-wrong";
-    fb.innerHTML = `
-      <div class="fb-title">✗ 答錯咗</div>
-      <div class="fb-body">
-        <div class="ansrow">你揀咗：<b>${chosenText}</b>　→　正確答案：<b>${q.options[q.answer]}</b></div>
-        ${q.explain}
-      </div>`;
-  }
-
-  document.getElementById("score").textContent = `得分：${score}`;
-
-  const nextBtn = document.getElementById("nextBtn");
-  nextBtn.classList.remove("hidden");
-  nextBtn.textContent = current === QUESTIONS.length - 1 ? "看結果 →" : "下一題 →";
-  nextBtn.focus();
-}
-
-function nextQuestion(){
-  current++;
-  if (current >= QUESTIONS.length){
-    showEnd();
-  } else {
-    showQuestion();
-  }
-}
-
-function showEnd(){
-  clearInterval(timerId);
-  document.getElementById("gameScreen").classList.add("hidden");
-  document.getElementById("endScreen").classList.remove("hidden");
-
-  const pct = Math.round((score / QUESTIONS.length) * 100);
-  document.getElementById("finalScore").textContent = `${score} / ${QUESTIONS.length}`;
-  document.getElementById("finalPct").textContent = `${pct}%`;
-
-  let msg = "";
-  if (pct >= 90) msg = "太棒了！你已經完全掌握這些詞彙！🎉";
-  else if (pct >= 70) msg = "做得很好！再溫習一下錯題，你一定能拿滿分。💪";
-  else if (pct >= 50) msg = "不錯的努力！請重點重溫下面的錯題解釋，會有很大幫助。";
-  else msg = "不要灰心！請仔細閱讀下面的錯題解釋，了解每個詞的意思，再試一次。";
-
-  document.getElementById("finalMsg").innerHTML = msg;
-
-  const summaryBox = document.getElementById("summaryNotes");
-  const notesList = document.getElementById("notesList");
-
-  if (wrongQuestionsList.length === 0) {
-    summaryBox.classList.add("hidden");
-  } else {
-    summaryBox.classList.remove("hidden");
-    let notesHTML = "";
-    
-    wrongQuestionsList.forEach((item, index) => {
-      notesHTML += `
-        <div class="note-item">
-          <div style="margin-bottom:6px; color:#666; font-style:italic;">題目：${item.question}</div>
-          <div style="margin-bottom:8px; color:#666; font-style:italic;">中文：${item.zh}</div>
-          <div style="margin-bottom:8px; color:#000000; font-weight:800;">你答咗：${item.chosen} (正確答案：${item.correct})</div>
-          <div style="color:#333; font-size:0.9rem; line-height:1.6;">${item.explain}</div>
-        </div>
-      `;
-    });
-    notesList.innerHTML = notesHTML;
-  }
-}
-
-document.addEventListener("keydown", (e) => {
-  if (document.getElementById("gameScreen").classList.contains("hidden")) return;
-
-  const key = e.key.toUpperCase();
-  const nextBtn = document.getElementById("nextBtn");
-
-  if (key === "ENTER" && !nextBtn.classList.contains("hidden")){
-    e.preventDefault();
-    nextQuestion();
+  if(queue.length === 0){
+    endGame();
     return;
   }
-  if (answered) return;
 
-  let idx = -1;
-  if ("ABCD".includes(key)) idx = "ABCD".indexOf(key);
-  if ("1234".includes(key)) idx = "1234".indexOf(key);
+  current = queue.shift();
+  currentOptions = makeOptions(current);
+  timeLimit = DIFF_TIME[current.diff] || 16;
+  timeLeft = timeLimit;
 
-  if (idx >= 0 && idx < 4){
-    e.preventDefault();
-    choose(idx);
+  difficultyStat.textContent = "難度：" + DIFF_LABEL[current.diff];
+  questionText.textContent = current.q;
+
+  currentOptions.forEach((opt, idx)=>{
+    const btn = document.createElement("button");
+    btn.className = "option";
+    btn.type = "button";
+    btn.textContent = String.fromCharCode(65 + idx) + ". " + opt.text;
+    btn.dataset.index = idx;
+    btn.addEventListener("click", ()=>handleAnswer(idx));
+    optionsEl.appendChild(btn);
+  });
+
+  updateStats();
+  updateTimerBar();
+  startTimer();
+}
+
+function handleAnswer(selectedIndex){
+  if(answered) return;
+  answered = true;
+  stopTimer();
+
+  const buttons = [...optionsEl.querySelectorAll(".option")];
+  buttons.forEach(b=>b.disabled = true);
+
+  const correctIndex = currentOptions.findIndex(o=>o.correct);
+  const selected = selectedIndex === null ? null : currentOptions[selectedIndex];
+  lastCorrect = !!(selected && selected.correct);
+
+  // highlight
+  buttons.forEach((b, idx)=>{
+    if(idx === correctIndex) b.classList.add("correct");
+    if(idx === selectedIndex && !lastCorrect) b.classList.add("wrong");
+  });
+
+  if(lastCorrect){
+    mastered.add(current.id);
+  }else{
+    totalMistakes++;
+    mistakes[current.id] = (mistakes[current.id] || 0) + 1;
   }
-});
+
+  // feedback
+  let title = "";
+  if(selectedIndex === null){
+    title = "⏰ 時間到！";
+  }else if(lastCorrect){
+    title = "✅ 答啱！";
+  }else{
+    title = "❌ 答錯，呢題會再出現。";
+  }
+
+  const selectedLine = selected
+    ? `<div><strong>你選擇：</strong> ${selected.text}</div>`
+    : `<div><strong>你選擇：</strong> （超時）</div>`;
+
+  feedback.innerHTML = `
+    <div class="feedback-title">${title}</div>
+    ${selectedLine}
+    <div><strong>正確答案：</strong> ${current.a}</div>
+    <div><strong>中文解釋：</strong> ${current.meaning}</div>
+    <div><strong>常見搭配：</strong> <span class="colloc">${current.colloc}</span></div>
+  `;
+  feedback.classList.remove("hidden");
+  nextBtn.classList.remove("hidden");
+  nextBtn.textContent = lastCorrect ? "下一題" : "再試下一題";
+  updateStats();
+}
+
+function continueGame(){
+  if(!current) return;
+
+  if(!lastCorrect){
+    queue.push(current); // wrong/timeout reappears in same round
+  }
+
+  current = null;
+  loadNext();
+}
+
+function endGame(){
+  stopTimer();
+  gameScreen.classList.add("hidden");
+  endScreen.classList.remove("hidden");
+
+  const wrongTotal = Object.values(mistakes).reduce((a,b)=>a+b,0);
+  endSummary.innerHTML = `
+    你已經完成全部 <strong>${QUESTIONS.length}</strong> 題。<br>
+    總錯誤次數：<strong>${wrongTotal}</strong> 次。<br>
+    <span class="muted">下面係完整回顧，包含中文解釋及常見搭配。</span>
+  `;
+
+  const sorted = QUESTIONS.slice().sort((a,b)=>a.id-b.id);
+  review.innerHTML = sorted.map(q=>{
+    const wrong = mistakes[q.id] || 0;
+    return `
+      <div class="review-item">
+        <div class="review-answer">${q.id}. ${q.a}</div>
+        <div><strong>中文解釋：</strong>${q.meaning}</div>
+        <div><strong>常見搭配：</strong><span class="colloc">${q.colloc}</span></div>
+        ${wrong ? `<div class="small"><strong>曾答錯：</strong>${wrong} 次</div>` : `<div class="small muted">一次答對</div>`}
+      </div>
+    `;
+  }).join("");
+}
+
+/* ============================================================
+   EVENTS
+   ============================================================ */
+startBtn.addEventListener("click", startGame);
+restartBtn.addEventListener("click", startGame);
+nextBtn.addEventListener("click", continueGame);
 </script>
 </body>
 </html>
