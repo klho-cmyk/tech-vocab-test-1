@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Technology Vocab Revision (Pages 8-9)</title>
+<title>Technology Vocab Test 1 Revision</title>
 <style>
   :root{
     --bg: #ffffff;
@@ -199,25 +199,23 @@
 <body>
 <div class="wrap">
 
-  <!-- ================= 開始畫面 ================= -->
   <section id="startScreen" class="card">
     <h1>💻 Technology Vocab 溫習</h1>
-    <p class="sub">Hardware & Information Security (Pages 8-9)</p>
+    <p class="sub">Vocab Test 1 (Application, Convenience, Biotechnology, Devices)</p>
     <div class="rulebox">
       這是一個為你準備的溫習遊戲：<br>
       • 每題都有<b>中文翻譯</b>，幫你理解句子。<br>
       • 答錯會有<b>詳細中文解釋</b>，話你知點解。<br>
       • 句子會慢慢變長，<b>時間亦會自動調整</b>（20秒 ➔ 30秒）。<br>
       • 測驗結束後有<b>錯題總結</b>，方便你重點重溫。<br><br>
-      📝 共 <b>20 題</b>｜選擇題格式
+      📝 共 <b>22 題</b>｜選擇題格式
     </div>
     <button class="bigbtn" onclick="startGame()">開始溫習 ▶</button>
   </section>
 
-  <!-- ================= 遊戲畫面 ================= -->
   <section id="gameScreen" class="card hidden">
     <div class="topbar">
-      <span id="progress">第 1 / 20 題</span>
+      <span id="progress">第 1 / 22 題</span>
       <span class="score" id="score">得分：0</span>
     </div>
 
@@ -237,15 +235,13 @@
     <button id="nextBtn" class="hidden" onclick="nextQuestion()">下一題 →</button>
   </section>
 
-  <!-- ================= 結束畫面 ================= -->
   <section id="endScreen" class="card hidden">
     <h2>溫習完成！</h2>
-    <div class="finalscore" id="finalScore">0 / 20</div>
+    <div class="finalscore" id="finalScore">0 / 22</div>
     <div class="finalpct" id="finalPct">0%</div>
     
     <div id="finalMsg"></div>
 
-    <!-- 錯題總結區 -->
     <div id="summaryNotes" class="summary-notes hidden">
       <h3>📝 錯題重點溫習 (Summary Notes)</h3>
       <div id="notesList"></div>
@@ -258,160 +254,174 @@
 
 <script>
 /* ============================================================
-   題庫：20 題 (Based on Pages 8-9: Hardware & Info Security)
+   題庫：22 題 (Vocab Test 1)
    答案位置已完全打散，包含中文翻譯及解釋。
    ============================================================ */
 const QUESTIONS = [
-  /* ---------- Q1-Q10: 20 秒 ---------- */
+  /* ---------- Q1-Q11: 20 秒 (Application & Convenience) ---------- */
   {
-    text: "My phone's ___ is dead. I need to charge it.",
-    zh: "我手機的電池沒電了，我需要充電。",
-    options: ["battery", "wire", "button", "sensor"], 
+    text: "This shop offers both expensive gaming PCs as well as ___ consoles for people on a budget.",
+    zh: "這家店既提供昂貴的遊戲電腦，也為預算有限的顧客提供低成本的遊戲機。",
+    options: ["low-cost", "high-end", "portable", "accurate"], 
     answer: 0,
-    explain: "正確答案：<b>battery (電池)</b>。<br>• wire 是電線。<br>• button 是按鈕。<br>• sensor 是感測器。"
+    explain: "正確答案：<b>low-cost (低成本的)</b>。<br>句子提到 people on a budget（預算有限的人），所以應該是便宜的、低成本的。"
   },
   {
-    text: "You should use a strong password to protect your ___ on the website.",
-    zh: "你應該使用一個強密碼來保護你在網站上的帳戶。",
-    options: ["privacy", "virus", "account", "warning"], 
-    answer: 2,
-    explain: "正確答案：<b>account (帳戶)</b>。<br>• privacy 是私隱（整體概念）。<br>• virus 是病毒。<br>• warning 是警告。"
-  },
-  {
-    text: "A ___ can steal your personal information online.",
-    zh: "罪犯可以在網上竊取你的個人資訊。",
-    options: ["sensor", "button", "hacker", "criminal"], 
-    answer: 3,
-    explain: "正確答案：<b>criminal (罪犯)</b>。<br>• hacker (黑客) 也是相關詞，但 criminal 泛指罪犯。<br>• sensor 是感測器；button 是按鈕。"
-  },
-  {
-    text: "I bought a ___ mouse. There are no wires attached to it.",
-    zh: "我買了一個無線滑鼠。它沒有連接任何電線。",
-    options: ["wireless", "hardware", "biometric", "suspicious"], 
-    answer: 0,
-    explain: "正確答案：<b>wireless (無線的)</b>。<br>句子提到「沒有電線」，所以是無線的。<br>• hardware 是硬體；biometric 是生物識別的。"
-  },
-  {
-    text: "Don't click on any ___ links in emails. They might be dangerous.",
-    zh: "不要點擊電子郵件中任何可疑的連結。它們可能很危險。",
-    options: ["suspicious", "accurate", "portable", "advanced"], 
-    answer: 0,
-    explain: "正確答案：<b>suspicious (可疑的)</b>。<br>• accurate 是準確的。<br>• portable 是便攜的。<br>• advanced 是先進的。"
-  },
-  {
-    text: "A computer ___ can make your device sick and stop it from working.",
-    zh: "電腦病毒可以讓你的設備生病（出問題）並停止運作。",
-    options: ["privacy", "breach", "virus", "data"], 
-    answer: 2,
-    explain: "正確答案：<b>virus (病毒)</b>。<br>• privacy 是私隱。<br>• breach 是外洩/違反。<br>• data 是數據。"
-  },
-  {
-    text: "We need to protect our ___ because we don't want strangers to know our secrets.",
-    zh: "我們需要保護我們的私隱，因為我們不想陌生人知道我們的秘密。",
-    options: ["hardware", "privacy", "processor", "webcam"], 
+    text: "They also have ___ devices to take with you on the go.",
+    zh: "他們也有方便隨身攜帶的便攜式設備。",
+    options: ["waterproof", "portable", "real time", "low-cost"], 
     answer: 1,
-    explain: "正確答案：<b>privacy (私隱)</b>。<br>句子提到不想陌生人知道秘密，所以是保護私隱。"
+    explain: "正確答案：<b>portable (便攜的)</b>。<br>take with you on the go (隨身攜帶) 提示了設備是輕便、容易帶走的。"
   },
   {
-    text: "The ___ on my keyboard is broken. I can't type the letter 'A'.",
-    zh: "我鍵盤上的按鈕壞了。我無法打出字母 'A'。",
-    options: ["sensor", "battery", "wire", "button"], 
-    answer: 3,
-    explain: "正確答案：<b>button (按鈕)</b>。<br>鍵盤上的按鍵就是 button。<br>• battery 是電池；wire 是電線。"
-  },
-  {
-    text: "The company had a data ___ and lost all customer information.",
-    zh: "該公司發生了數據外洩，失去了所有客戶資訊。",
-    options: ["breach", "button", "sensor", "hardware"], 
-    answer: 0,
-    explain: "正確答案：<b>breach (外洩)</b>。<br>Data breach 是固定搭配，指數據外洩。<br>• hardware 是硬體。"
-  },
-  {
-    text: "A ___ can take pictures and videos for your computer.",
-    zh: "網絡攝像機可以為你的電腦拍攝照片和影片。",
-    options: ["processor", "tablet", "webcam", "wire"], 
+    text: "With the card scanner, customers can use this quick ___ that is both safe and convenient.",
+    zh: "有了讀卡機，顧客可以使用這種既安全又方便的快速付款方式。",
+    options: ["hoverboard", "chatbot", "payment method", "translation"], 
     answer: 2,
-    explain: "正確答案：<b>webcam (網絡攝像機)</b>。<br>• processor 是處理器。<br>• tablet 是平板電腦。<br>• wire 是電線。"
+    explain: "正確答案：<b>payment method (付款方式)</b>。<br>讀卡機對應的是付款。選項中只有 payment method 是付款方式。"
+  },
+  {
+    text: "With the card scanner, customers can use this quick payment method that is both safe and ___.",
+    zh: "有了讀卡機，顧客可以使用這種既安全又方便的快速付款方式。",
+    options: ["suspicious", "convenient", "accurate", "real time"], 
+    answer: 1,
+    explain: "正確答案：<b>convenient (方便的)</b>。<br>句子中 safe and ___ (安全和...)，最常見的搭配就是方便 (convenient)。"
+  },
+  {
+    text: "If you have any questions, simply scan the ___ using your phone's camera.",
+    zh: "如果你有任何問題，只需用手機鏡頭掃描二維碼。",
+    options: ["QR code", "graphics", "retina", "button"], 
+    answer: 0,
+    explain: "正確答案：<b>QR code (二維碼)</b>。<br>scan (掃描) + 手機鏡頭，最直接對應的就是二維碼。"
+  },
+  {
+    text: "You will then be asked to download our app which will allow you to talk with our state-of-the-art ___.",
+    zh: "然後你會被要求下載我們的應用程式，它允許你與我們最先進的聊天機器人交談。",
+    options: ["drone", "processor", "chatbot", "smartwatch"], 
+    answer: 2,
+    explain: "正確答案：<b>chatbot (聊天機器人)</b>。<br>句子提到 talk with (與...交談)，所以是能對話的 AI，即 chatbot。"
+  },
+  {
+    text: "This app can ___ 50 languages from voice to text.",
+    zh: "這個應用程式可以將 50 種語言的語音翻譯成文字。",
+    options: ["track", "translate", "interact", "hack"], 
+    answer: 1,
+    explain: "正確答案：<b>translate (翻譯)</b>。<br>把語言從 voice (語音) 轉成 text (文字)，這個動作就是翻譯。"
+  },
+  {
+    text: "This app can translate 50 languages from voice to text in ___, making it an invaluable tool for tourists.",
+    zh: "這個應用程式可以即時將 50 種語言的語音翻譯成文字，這使它成為遊客的無價工具。",
+    options: ["offline", "slow motion", "the future", "real time"], 
+    answer: 3,
+    explain: "正確答案：<b>real time (即時)</b>。<br>in real time 是固定搭配，意思是「即時地」，沒有延遲。"
+  },
+  {
+    text: "It does make mistakes sometimes, but it is fairly ___ overall.",
+    zh: "它有時確實會出錯，但總體來說相當準確。",
+    options: ["accurate", "waterproof", "portable", "autonomous"], 
+    answer: 0,
+    explain: "正確答案：<b>accurate (準確的)</b>。<br>句子前半句說「有時會出錯」，後半句用 but (但是) 轉折，所以總體還是「準確」的。"
+  },
+  {
+    text: "In a major breakthrough, scientists have finally developed a real ___ which allows users to stand on it and float in mid-air.",
+    zh: "在重大突破中，科學家終於開發出了一個真正的懸浮滑板，允許使用者站在上面並在半空中漂浮。",
+    options: ["drone", "hoverboard", "smartwatch", "chatbot"], 
+    answer: 1,
+    explain: "正確答案：<b>hoverboard (懸浮滑板)</b>。<br>stand on it and float in mid-air (站在上面並在半空中漂浮) 正是 hoverboard 的特徵。"
+  },
+  {
+    text: "However, they are not ___, so they cannot be used on water.",
+    zh: "然而，它們不防水，所以不能在水上使用。",
+    options: ["heavy", "expensive", "waterproof", "alive"], 
+    answer: 2,
+    explain: "正確答案：<b>waterproof (防水的)</b>。<br>句子提到 cannot be used on water (不能在水上使用)，因為它不防水。"
   },
 
-  /* ---------- Q11-Q20: 30 秒 (句子稍長/較難) ---------- */
+  /* ---------- Q12-Q22: 30 秒 (Biotechnology & Devices) ---------- */
   {
-    text: "___ is when criminals try to trick you into giving your password by pretending to be a bank.",
-    zh: "網絡釣魚是指罪犯假裝是銀行，試圖騙取你的密碼。",
-    options: ["Phishing", "Hardware", "Encryption", "Violation"], 
-    answer: 0,
-    explain: "正確答案：<b>Phishing (網絡釣魚)</b>。<br>這是一種常見的網絡詐騙手法。<br>• Encryption 是加密。<br>• Violation 是違反。"
+    text: "This ___ which you wear on your wrist can track various important health data.",
+    zh: "這款戴在手腕上的智能手錶可以追蹤各種重要的健康數據。",
+    options: ["camera", "drone", "smartwatch", "processor"], 
+    answer: 2,
+    explain: "正確答案：<b>smartwatch (智能手錶)</b>。<br>wear on your wrist (戴在手腕上) 提示了是手錶，加上能追蹤健康數據，所以是智能手錶。"
   },
   {
-    text: "You must read the terms and ___ before you click 'agree'.",
-    zh: "在點擊「同意」之前，你必須閱讀條款及細則。",
-    options: ["conditions", "details", "sources", "threats"], 
+    text: "This smartwatch can ___ various important health data, such as the wearer's heart rate and skin temperature.",
+    zh: "這款智能手錶可以追蹤各種重要的健康數據，例如佩戴者的心率和皮膚溫度。",
+    options: ["track", "translate", "download", "scan"], 
     answer: 0,
-    explain: "正確答案：<b>conditions (細則)</b>。<br>Terms and conditions 是固定搭配，意思是「條款及細則」。"
+    explain: "正確答案：<b>track (追蹤)</b>。<br>手錶紀錄並監測健康數據的動詞通常用 track。"
   },
   {
-    text: "The ___ detects movement and turns on the lights automatically.",
-    zh: "感測器偵測到移動，並自動開燈。",
-    options: ["sensor", "webcam", "account", "button"], 
-    answer: 0,
-    explain: "正確答案：<b>sensor (感測器)</b>。<br>• webcam 是網絡攝像機。<br>• account 是帳戶。"
+    text: "It can track various important health data, such as the wearer's ___ and skin temperature.",
+    zh: "它可以追蹤各種重要的健康數據，例如佩戴者的心率和皮膚溫度。",
+    options: ["QR code", "payment method", "heart rate", "graphics card"], 
+    answer: 2,
+    explain: "正確答案：<b>heart rate (心率)</b>。<br>與 skin temperature (皮膚溫度) 並列的健康數據，當然是心率。"
   },
   {
-    text: "Hackers try to ___ into computer systems to steal data.",
-    zh: "黑客試圖入侵電腦系統以竊取數據。",
-    options: ["invade", "disclose", "translate", "install"], 
-    answer: 0,
-    explain: "正確答案：<b>invade (入侵)</b>。<br>• disclose 是公開/洩露。<br>• install 是安裝。"
+    text: "The high-security bank vault uses a high-tech device which takes a ___ of a person's eye before unlocking for them.",
+    zh: "高安全性的銀行金庫使用了一種高科技設備，在為人解鎖前會對人的眼睛進行視網膜掃描。",
+    options: ["camera", "retinal scan", "fingerprint", "password"], 
+    answer: 1,
+    explain: "正確答案：<b>retinal scan (視網膜掃描)</b>。<br>句子提到 of a person's eye (人的眼睛)，所以是視網膜掃描。"
   },
   {
-    text: "___ information, like your ID number or bank details, should be kept secret.",
-    zh: "敏感的資訊，例如你的身份證號碼或銀行資料，應該保密。",
-    options: ["Sensitive", "Biometric", "Wireless", "Portable"], 
-    answer: 0,
-    explain: "正確答案：<b>Sensitive (敏感的)</b>。<br>Sensitive information 指敏感資訊。<br>• Biometric 是生物識別的。<br>• Wireless 是無線的。"
+    text: "The ___ comes with a built-in camera which can be used to take photos and videos from the sky.",
+    zh: "這款無人機配有內置鏡頭，可用於從空中拍攝照片和影片。",
+    options: ["laptop", "smartphone", "hoverboard", "drone"], 
+    answer: 3,
+    explain: "正確答案：<b>drone (無人機)</b>。<br>from the sky (從天空中) 提示了會飛的設備，即無人機。"
   },
   {
-    text: "This computer uses ___ memory (RAM), which allows you to open many apps at the same time.",
-    zh: "這台電腦使用隨機存取記憶體 (RAM)，這讓你可以在同一時間打開很多應用程式。",
-    options: ["random-access", "biometric", "high-end", "wireless"], 
-    answer: 0,
-    explain: "正確答案：<b>random-access</b>。<br>RAM 的全寫是 Random-Access Memory (隨機存取記憶體)。"
+    text: "The drone comes with a built-in ___ which can be used to take photos and videos from the sky.",
+    zh: "這款無人機配有內置鏡頭，可用於從空中拍攝照片和影片。",
+    options: ["screen", "camera", "battery", "button"], 
+    answer: 1,
+    explain: "正確答案：<b>camera (鏡頭/相機)</b>。<br>take photos and videos (拍照和錄影) 需要用到的設備是鏡頭。"
   },
   {
-    text: "A ___ lock uses your face or fingerprint to unlock your phone.",
-    zh: "生物識別鎖使用你的臉部或指紋來解鎖手機。",
-    options: ["biometric", "suspicious", "hardware", "wireless"], 
-    answer: 0,
-    explain: "正確答案：<b>biometric (生物識別的)</b>。<br>指利用人體特徵（如指紋、面容）來進行識別。"
+    text: "After entering your symptoms into the ___, it will list some possible diseases.",
+    zh: "將你的症狀輸入健康應用程式後，它會列出一些可能的疾病。",
+    options: ["chatbot", "health app", "drone", "video game"], 
+    answer: 1,
+    explain: "正確答案：<b>health app (健康應用程式)</b>。<br>輸入 symptoms (症狀) 並得到 diseases (疾病) 結果的，是健康應用程式。"
   },
   {
-    text: "Good ___ protects your computer from hackers and viruses.",
-    zh: "良好的網絡安全可以保護你的電腦免受黑客和病毒的侵害。",
-    options: ["cybersecurity", "hardware", "webcam", "battery"], 
-    answer: 0,
-    explain: "正確答案：<b>cybersecurity (網絡安全)</b>。<br>• hardware 是硬體。<br>• webcam 是網絡攝像機。"
+    text: "After entering your symptoms into the health app, it will list some possible ___ or ailments related to the given symptoms.",
+    zh: "將你的症狀輸入健康應用程式後，它會列出一些與給定症狀相關的可能疾病或不適。",
+    options: ["graphics", "diseases", "payment methods", "specifications"], 
+    answer: 1,
+    explain: "正確答案：<b>diseases (疾病)</b>。<br>與 ailments (小病/不適) 並列的詞是 diseases。"
   },
   {
-    text: "I need to buy new computer ___ because my old computer is too slow.",
-    zh: "我需要買新的電腦硬體，因為我的舊電腦太慢了。",
-    options: ["hardware", "privacy", "breach", "phishing"], 
+    text: "Zack thought he might need to buy a new gaming computer as the ___ for the latest games were very demanding.",
+    zh: "扎克認為他可能需要買一台新的遊戲電腦，因為最新遊戲的規格要求非常高。",
+    options: ["specifications", "processors", "graphics", "prices"], 
     answer: 0,
-    explain: "正確答案：<b>hardware (硬體)</b>。<br>指電腦的實體零件。<br>• privacy 是私隱。<br>• phishing 是網絡釣魚。"
+    explain: "正確答案：<b>specifications (規格)</b>。<br>遊戲對電腦的要求稱為 specifications (規格)。"
   },
   {
-    text: "The police gave a ___ about the dangerous criminal in the area.",
-    zh: "警方就該地區的危險罪犯發出了警告。",
-    options: ["warning", "sensor", "button", "account"], 
+    text: "He needed a new ___ card and a new processor.",
+    zh: "他需要一張新的顯示卡和一個新的處理器。",
+    options: ["memory", "graphics", "battery", "network"], 
+    answer: 1,
+    explain: "正確答案：<b>graphics (圖像/顯示)</b>。<br>graphics card 是固定搭配，意思是「顯示卡」。"
+  },
+  {
+    text: "He needed a new graphics card and a new ___.",
+    zh: "他需要一張新的顯示卡和一個新的處理器。",
+    options: ["processor", "monitor", "keyboard", "mouse"], 
     answer: 0,
-    explain: "正確答案：<b>warning (警告)</b>。<br>• sensor 是感測器。<br>• account 是帳戶。"
+    explain: "正確答案：<b>processor (處理器)</b>。<br>與 graphics card (顯示卡) 並列的電腦核心硬件是處理器。"
   }
 ];
 
 /* ============================================================
-   彈性計時：前10題20秒，後10題30秒
+   彈性計時：前11題20秒，後11題30秒
    ============================================================ */
 function getQuestionTimeLimit(index){
-  if (index < 10) return 20;
+  if (index < 11) return 20;
   return 30;
 }
 
